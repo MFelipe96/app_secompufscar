@@ -1,6 +1,13 @@
 package br.com.secompufscar.app;
 
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.CardView;
+import android.view.View;
+import android.widget.GridLayout;
+import android.widget.Toast;
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,6 +16,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -119,6 +127,7 @@ public class Home extends Fragment {
 
     //Executado quando a view está pronta. Caso o contrario o código tentaria
     //Acessar o que ainda não existe
+    /*
     @Override
     public void onStart() {
         super.onStart();
@@ -161,7 +170,7 @@ public class Home extends Fragment {
 
         );
     }
-
+*/
     @Override
     public void onDetach() {
         super.onDetach();
@@ -267,7 +276,7 @@ public class Home extends Fragment {
             if (ok) {
                 try {
                     //Referencia a lista do layout
-                    lv = (ListView) getView().findViewById(R.id.listViewTwitter);
+                   // lv = (ListView) getView().findViewById(R.id.listViewTwitter);
 
                     // Com o nosso adapter customizado, tenta adicionar as informações nele
                     ListTwitterAdapter adapter = new ListTwitterAdapter(getActivity(), tweetsArray);

@@ -8,9 +8,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.animation.Animation;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -34,44 +37,48 @@ import br.com.secompufscar.app.data.DatabaseHandler;
 import br.com.secompufscar.app.utilities.NetworkUtils;
 
 public class MainActivity extends AppCompatActivity
+
+
         implements NavigationView.OnNavigationItemSelectedListener,
-        Home.OnFragmentInteractionListener {
+    Home.OnFragmentInteractionListener
 
-    private final String CURRENT_FRAGMENT_PARAM = "current_fragment";
+    {
 
-    public static final String CURRENT_TAB_PARAM = "currenttab";
-    public static final String GET_DATA_PARAM = "getdata";
-    public static int current_tab;
-    public static boolean get_atividades_from_server = true;
+        private final String CURRENT_FRAGMENT_PARAM = "current_fragment";
 
-    private static final int HOME_POSITION = 0;
-    private static final int CRONOGRAMA_POSITION = 1;
-    private static final int PESSOAS_POSITION = 3;
-    private static final int MINHAS_ATIVIDADES_POSITION = 4;
-    private static final int PATROCINADORES_POSITION = 7;
-    private static final int SOBRE_POSITION = 8;
+        public static final String CURRENT_TAB_PARAM = "currenttab";
+        public static final String GET_DATA_PARAM = "getdata";
+        public static int current_tab;
+        public static boolean get_atividades_from_server = true;
 
-    private SharedPreferences preferencias;
-    private boolean notifications;
-    private boolean internet;
+        private static final int HOME_POSITION = 0;
+        private static final int CRONOGRAMA_POSITION = 1;
+        private static final int PESSOAS_POSITION = 3;
+        private static final int MINHAS_ATIVIDADES_POSITION = 4;
+        private static final int PATROCINADORES_POSITION = 7;
+        private static final int SOBRE_POSITION = 8;
 
-    private HashMap<String, Fragment> fragmentos;
+        private SharedPreferences preferencias;
+        private boolean notifications;
+        private boolean internet;
 
-    private DrawerLayout drawer;
-    private ActionBarDrawerToggle toggle;
-    private NavigationView navigationView;
-    private TextView title;
+        private HashMap<String, Fragment> fragmentos;
 
-    private View contentView;
-    private View loadingView;
+        private DrawerLayout drawer;
+        private ActionBarDrawerToggle toggle;
+        private NavigationView navigationView;
+        private TextView title;
 
-    private Toolbar toolbar;
-    private GetDataTask getDataTask;
+        private View contentView;
+        private View loadingView;
 
-    private int current_fragment, previousItemSelected, itemSelected;
+        private Toolbar toolbar;
+        private GetDataTask getDataTask;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+        private int current_fragment, previousItemSelected, itemSelected;
+
+        @Override
+        protected void onCreate (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
@@ -98,11 +105,18 @@ public class MainActivity extends AppCompatActivity
         DatabaseHandler.setInstance(this);
 
         setContentView(R.layout.activity_main);
+/*
+        imagemAnimacao = (ImageView) findViewById(R.id.imagemAnimacao);
+        imagemAnimacao.setBackgroundResource(R.drawable.icone_animacao);
 
+
+        AnimationDrawable anima = (AnimationDrawable)imagemAnimacao.getBackground();
+        anima.start();
+*/
         title = (TextView) findViewById(R.id.fragment_title);
 
         contentView = findViewById(R.id.content_frame);
-        contentView.setVisibility(View.GONE);
+       contentView.setVisibility(View.GONE);
         initializeFragments();
 
         loadingView = findViewById(R.id.loading_spinner);
@@ -121,7 +135,7 @@ public class MainActivity extends AppCompatActivity
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 
-        toggle = new ActionBarDrawerToggle(
+        toggle = new    ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -209,7 +223,7 @@ public class MainActivity extends AppCompatActivity
             FirebaseMessaging.getInstance().subscribeToTopic("secomp2l17");
     }
 
-    private void fadeOut() {
+        private void fadeOut () {
         contentView.setAlpha(0f);
         contentView.setVisibility(View.VISIBLE);
 
@@ -231,7 +245,7 @@ public class MainActivity extends AppCompatActivity
                 });
     }
 
-    private void initializeFragments() {
+        private void initializeFragments () {
         fragmentos = new HashMap<>();
         fragmentos.put("home", new Home());
         fragmentos.put("cronograma", new Cronograma());
@@ -241,7 +255,7 @@ public class MainActivity extends AppCompatActivity
         fragmentos.put("sobre", new Sobre());
     }
 
-    private void setFragment() {
+        private void setFragment () {
         contentView.setAlpha(1f);
 
         navigationView.getMenu().getItem(current_fragment).setChecked(true);
@@ -288,13 +302,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
+        @Override
+        public void onFragmentInteraction (Uri uri){
 
     }
 
-    @Override
-    public void onBackPressed() {
+        @Override
+        public void onBackPressed () {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -326,8 +340,8 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+        @Override
+        public boolean onNavigationItemSelected (MenuItem item){
         drawer.closeDrawer(GravityCompat.START);
         itemSelected = item.getItemId();
 
@@ -364,8 +378,8 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+        @Override
+        public void onSaveInstanceState (Bundle savedInstanceState){
         // Save the user's current game state
         savedInstanceState.putInt(CURRENT_FRAGMENT_PARAM, current_fragment);
         savedInstanceState.putInt(CURRENT_TAB_PARAM, current_tab);
@@ -374,8 +388,8 @@ public class MainActivity extends AppCompatActivity
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    @Override
-    public void onResume() {
+        @Override
+        public void onResume () {
         super.onResume();  // Always call the superclass method first
         navigationView.getMenu().getItem(current_fragment).setChecked(true);
         setFragment();
@@ -383,103 +397,104 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private class HandleMenuClick extends AsyncTask<Integer, Void, Boolean> {
-        @Override
-        protected Boolean doInBackground(Integer... params) {
-            int id = params[0];
+        private class HandleMenuClick extends AsyncTask<Integer, Void, Boolean> {
+            @Override
+            protected Boolean doInBackground(Integer... params) {
+                int id = params[0];
 
-            Fragment fragment = null;
+                Fragment fragment = null;
 
-            switch (id) {
-                case R.id.nav_home:
-                    fragment = fragmentos.get("home");
-                    current_fragment = HOME_POSITION;
-                    break;
-                case R.id.nav_cronograma:
-                    fragment = fragmentos.get("cronograma");
-                    current_fragment = CRONOGRAMA_POSITION;
-                    break;
-                case R.id.nav_feed:
-                    startActivity(new Intent(MainActivity.this, Social.class));
-                    break;
-                case R.id.nav_pessoas:
-                    fragment = fragmentos.get("pessoas");
-                    current_fragment = PESSOAS_POSITION;
-                    break;
-                case R.id.nav_minhasAtividades:
-                    fragment = fragmentos.get("minhas_atividades");
-                    current_fragment = MINHAS_ATIVIDADES_POSITION;
-                    break;
-                case R.id.nav_map:
-                    startActivity(new Intent(MainActivity.this, MapsActivity.class));
-                    break;
-                case R.id.nav_patrocinadores:
-                    fragment = fragmentos.get("patrocinadores");
-                    current_fragment = PATROCINADORES_POSITION;
-                    break;
-                case R.id.nav_sobre:
-                    fragment = fragmentos.get("sobre");
-                    current_fragment = SOBRE_POSITION;
-                    break;
-                case R.id.nav_areaParticipante:
-                    startActivity(new Intent(MainActivity.this, AreaDoParticipante.class));
-                    break;
-                case R.id.nav_settings:
-                    startActivity(new Intent(MainActivity.this, Settings.class));
-                    break;
-                default:
+                switch (id) {
+                    case R.id.nav_home:
+                        fragment = fragmentos.get("home");
+                        current_fragment = HOME_POSITION;
+                        break;
+                    case R.id.nav_cronograma:
+                        fragment = fragmentos.get("cronograma");
+                        current_fragment = CRONOGRAMA_POSITION;
+                        break;
+                    case R.id.nav_feed:
+                        startActivity(new Intent(MainActivity.this, Social.class));
+                        break;
+                    case R.id.nav_pessoas:
+                        fragment = fragmentos.get("pessoas");
+                        current_fragment = PESSOAS_POSITION;
+                        break;
+                    case R.id.nav_minhasAtividades:
+                        fragment = fragmentos.get("minhas_atividades");
+                        current_fragment = MINHAS_ATIVIDADES_POSITION;
+                        break;
+                    case R.id.nav_map:
+                        startActivity(new Intent(MainActivity.this, MapsActivity.class));
+                        break;
+                    case R.id.nav_patrocinadores:
+                        fragment = fragmentos.get("patrocinadores");
+                        current_fragment = PATROCINADORES_POSITION;
+                        break;
+                    case R.id.nav_sobre:
+                        fragment = fragmentos.get("sobre");
+                        current_fragment = SOBRE_POSITION;
+                        break;
+                    case R.id.nav_areaParticipante:
+                        startActivity(new Intent(MainActivity.this, AreaDoParticipante.class));
+                        break;
+                    case R.id.nav_settings:
+                        startActivity(new Intent(MainActivity.this, Settings.class));
+                        break;
+                    default:
+                }
+
+                if (fragment != null) {
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+                    previousItemSelected = itemSelected;
+                    return false;
+                }
+
+                return true;
             }
 
-            if (fragment != null) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-                previousItemSelected = itemSelected;
-                return false;
+            @Override
+            protected void onPostExecute(Boolean isActivity) {
+                if (!isActivity) {
+                    contentView.setAlpha(1f);
+                }
             }
-
-            return true;
         }
 
-        @Override
-        protected void onPostExecute(Boolean isActivity) {
-            if (!isActivity) {
-                contentView.setAlpha(1f);
+        private class GetDataTask extends AsyncTask<Void, Void, Void> {
+            @Override
+            protected void onPreExecute() {
+                title.setVisibility(View.GONE);
+
+                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                toggle.onDrawerStateChanged(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                toggle.setDrawerIndicatorEnabled(false);
+                toggle.syncState();
+
+                loadingView.setVisibility(View.VISIBLE);
+                contentView.setVisibility(View.GONE);
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                Atividade.getAtividadesFromHTTP(getBaseContext());
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void s) {
+                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                toggle.onDrawerStateChanged(DrawerLayout.LOCK_MODE_UNLOCKED);
+                toggle.setDrawerIndicatorEnabled(true);
+                toggle.syncState();
+
+                if (loadingView.isShown()) {
+                    fadeOut();
+                }
+
+                title.setVisibility(View.VISIBLE);
             }
         }
     }
 
-    private class GetDataTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            title.setVisibility(View.GONE);
-
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            toggle.onDrawerStateChanged(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            toggle.setDrawerIndicatorEnabled(false);
-            toggle.syncState();
-
-            loadingView.setVisibility(View.VISIBLE);
-            contentView.setVisibility(View.GONE);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            Atividade.getAtividadesFromHTTP(getBaseContext());
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void s) {
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            toggle.onDrawerStateChanged(DrawerLayout.LOCK_MODE_UNLOCKED);
-            toggle.setDrawerIndicatorEnabled(true);
-            toggle.syncState();
-
-            if (loadingView.isShown()) {
-                fadeOut();
-            }
-
-            title.setVisibility(View.VISIBLE);
-        }
-    }
-}
